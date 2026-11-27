@@ -65,13 +65,13 @@ enum CopyStatus {
 Member <|-- StudentMember
 Member <|-- TeacherMember
 
-Member "1" --> "0..*" Loan : loans
-Loan "0..*" --> "1" Copy : copy
+Member "1" <--> "0..*" Loan : loans
+Loan "0..*" <--> "1" Copy : copy
 
-Member "1" --> "0..*" Reservation : reservations
-Reservation "0..*" --> "1" Book : book
+Member "1" <--> "0..*" Reservation : reservations
+Reservation "0..*" <--> "1" Book : book
 
-Book "1" --> "0..*" Copy : copies
-Book "1..*" --> "1..*" Author : authors
+Book "1" <--> "0..*" Copy : copies
+Book "1..*" <--> "1..*" Author : authors
 
 @enduml

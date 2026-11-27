@@ -43,7 +43,11 @@ public abstract class Member {
     public abstract int maxLoans();
 
     public boolean canBorrow() {
-        return loans.size() < maxLoans();
+        long activeLoans = loans.stream()
+                .filter(loan -> loan.getReturnDate() == null)
+                .count();
+
+        return activeLoans < maxLoans();
     }
 
     public Loan borrow(Copy copy, LocalDate today) {
@@ -73,4 +77,5 @@ public abstract class Member {
     void addReservation(Reservation reservation) {
         reservations.add(reservation);
     }
+
 }

@@ -282,4 +282,39 @@ class ModelTest {
         // Check reservation
         assertEquals(reservation, book.firstReservation());
     }
+    @Test
+    void testCanBorrowAfterReturningAllLoans() {
+        Book book = createBook();
+
+        Member student = new StudentMember(
+                "S002", "Karim", "karim@email.com", "Master"
+        );
+
+        List<Loan> loans = new java.util.ArrayList<>();
+
+        // Borrow five books
+        for (int i = 0; i < 5; i++) {
+            Copy copy = new Copy(book, "R00" + i);
+            Loan loan = student.borrow(copy, today);
+            loans.add(loan);
+        }
+
+        // Student has reached the maximum
+        assertFalse(student.canBorrow());
+
+        // Return all five books
+        for (Loan loan : loans) {
+            loan.close(today.plusDays(5));
+        }
+
+        // Student should be able to borrow again
+        assertTrue(student.canBorrow());
+
+        Copy newCopy = new Copy(book, "R006");
+        Loan newLoan = student.borrow(newCopy, today.plusDays(6));
+
+        assertNotNull(newLoan);
+        assertNull(newLoan.getReturnDate());
+        assertTrue(student.canBorrow());
+    }
 }
